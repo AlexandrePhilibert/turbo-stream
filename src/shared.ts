@@ -38,6 +38,14 @@ export const STR_UINT_8_ARRAY = "o";
 export const STR_UINT_8_ARRAY_CLAMPED = "C";
 export const STR_UNDEFINED = "u";
 export const STR_URL = "U";
+export const STR_TEMPORAL_DURATION = "a";
+export const STR_TEMPORAL_INSTANT = "p";
+export const STR_TEMPORAL_PLAIN_DATE = "d";
+export const STR_TEMPORAL_PLAIN_DATE_TIME = "q";
+export const STR_TEMPORAL_PLAIN_MONTH_DAY = "m";
+export const STR_TEMPORAL_PLAIN_TIME = "T";
+export const STR_TEMPORAL_PLAIN_YEAR_MONTH = "y";
+export const STR_TEMPORAL_ZONED_DATE_TIME = "Z";
 
 let SUPPORTS_FILE = true;
 try {

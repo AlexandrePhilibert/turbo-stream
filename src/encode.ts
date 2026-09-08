@@ -39,6 +39,14 @@ import {
 	STR_UINT_8_ARRAY_CLAMPED,
 	STR_UNDEFINED,
 	STR_URL,
+	STR_TEMPORAL_DURATION,
+	STR_TEMPORAL_INSTANT,
+	STR_TEMPORAL_PLAIN_DATE,
+	STR_TEMPORAL_PLAIN_DATE_TIME,
+	STR_TEMPORAL_PLAIN_MONTH_DAY,
+	STR_TEMPORAL_PLAIN_TIME,
+	STR_TEMPORAL_PLAIN_YEAR_MONTH,
+	STR_TEMPORAL_ZONED_DATE_TIME,
 	SUPPORTS_FILE,
 	WaitGroup,
 } from "./shared.js";
@@ -380,6 +388,22 @@ export function encodeSync(
 
 			if (value instanceof Date) {
 				chunks.push(STR_DATE, '"', value.toJSON(), '"');
+			} else if (value instanceof Temporal.Duration) {
+				chunks.push(STR_TEMPORAL_DURATION, '"', value.toJSON(), '"');
+			} else if (value instanceof Temporal.Instant) {
+				chunks.push(STR_TEMPORAL_INSTANT, '"', value.toJSON(), '"');
+			} else if (value instanceof Temporal.PlainDate) {
+				chunks.push(STR_TEMPORAL_PLAIN_DATE, '"', value.toJSON(), '"');
+			} else if (value instanceof Temporal.PlainDateTime) {
+				chunks.push(STR_TEMPORAL_PLAIN_DATE_TIME, '"', value.toJSON(), '"');
+			} else if (value instanceof Temporal.PlainMonthDay) {
+				chunks.push(STR_TEMPORAL_PLAIN_MONTH_DAY, '"', value.toJSON(), '"');
+			} else if (value instanceof Temporal.PlainTime) {
+				chunks.push(STR_TEMPORAL_PLAIN_TIME, '"', value.toJSON(), '"');
+			} else if (value instanceof Temporal.PlainYearMonth) {
+				chunks.push(STR_TEMPORAL_PLAIN_YEAR_MONTH, '"', value.toJSON(), '"');
+			} else if (value instanceof Temporal.ZonedDateTime) {
+				chunks.push(STR_TEMPORAL_ZONED_DATE_TIME, '"', value.toJSON(), '"');
 			} else if (value instanceof RegExp) {
 				chunks.push(STR_REGEXP, JSON.stringify([value.source, value.flags]));
 			} else if (value instanceof URL) {

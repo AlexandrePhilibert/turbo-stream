@@ -158,6 +158,122 @@ describe("decode", () => {
 		expect(decoded[0]).toBe(decoded[1]);
 	});
 
+	test("Temporal Duration", async () => {
+		const duration = Temporal.Duration.from("PT1H30M");
+		const decoded = await quickDecode(duration);
+		expect(decoded).toEqual(duration);
+		expect(decoded).toBeInstanceOf(Temporal.Duration);
+	});
+
+	test("Temporal Duration reference", async () => {
+		const duration = Temporal.Duration.from("PT1H30M");
+		const decoded = await quickDecode([duration, duration]);
+		expect(decoded).toEqual([duration, duration]);
+		expect(decoded[0]).toBe(decoded[1]);
+	});
+
+	test("Temporal Instant", async () => {
+		const instant = Temporal.Instant.from("2021-03-12T00+08:00");
+		const decoded = await quickDecode(instant);
+		expect(decoded).toEqual(instant);
+		expect(decoded).toBeInstanceOf(Temporal.Instant);
+	});
+
+	test("Temporal Instant reference", async () => {
+		const instant = Temporal.Instant.from("2021-03-12T00+08:00");
+		const decoded = await quickDecode([instant, instant]);
+		expect(decoded).toEqual([instant, instant]);
+		expect(decoded[0]).toBe(decoded[1]);
+	});
+
+	test("Temporal PlainDate", async () => {
+		const plainDate = Temporal.PlainDate.from("2021-07-01");
+		const decoded = await quickDecode(plainDate);
+		expect(decoded).toEqual(plainDate);
+		expect(decoded).toBeInstanceOf(Temporal.PlainDate);
+	});
+
+	test("Temporal PlainDate reference", async () => {
+		const plainDate = Temporal.PlainDate.from("2021-07-01");
+		const decoded = await quickDecode([plainDate, plainDate]);
+		expect(decoded).toEqual([plainDate, plainDate]);
+		expect(decoded[0]).toBe(decoded[1]);
+	});
+
+	test("Temporal PlainDateTime", async () => {
+		const plainDateTime = Temporal.PlainDateTime.from("2021-07-01T12:34:56");
+		const decoded = await quickDecode(plainDateTime);
+		expect(decoded).toEqual(plainDateTime);
+		expect(decoded).toBeInstanceOf(Temporal.PlainDateTime);
+	});
+
+	test("Temporal PlainDateTime reference", async () => {
+		const plainDateTime = Temporal.PlainDateTime.from("2021-07-01T12:34:56");
+		const decoded = await quickDecode([plainDateTime, plainDateTime]);
+		expect(decoded).toEqual([plainDateTime, plainDateTime]);
+		expect(decoded[0]).toBe(decoded[1]);
+	});
+
+	test("Temporal PlainMonthDay", async () => {
+		const plainMonthDay = Temporal.PlainMonthDay.from("05-02");
+		const decoded = await quickDecode(plainMonthDay);
+		expect(decoded).toEqual(plainMonthDay);
+		expect(decoded).toBeInstanceOf(Temporal.PlainMonthDay);
+	});
+
+	test("Temporal PlainMonthDay reference", async () => {
+		const plainMonthDay = Temporal.PlainMonthDay.from("05-02");
+		const decoded = await quickDecode([plainMonthDay, plainMonthDay]);
+		expect(decoded).toEqual([plainMonthDay, plainMonthDay]);
+		expect(decoded[0]).toBe(decoded[1]);
+	});
+
+	test("Temporal PlainTime", async () => {
+		const plainTime = Temporal.PlainTime.from("12:34:56");
+		const decoded = await quickDecode(plainTime);
+		expect(decoded).toEqual(plainTime);
+		expect(decoded).toBeInstanceOf(Temporal.PlainTime);
+	});
+
+	test("Temporal PlainTime reference", async () => {
+		const plainTime = Temporal.PlainTime.from("12:34:56");
+		const decoded = await quickDecode([plainTime, plainTime]);
+		expect(decoded).toEqual([plainTime, plainTime]);
+		expect(decoded[0]).toBe(decoded[1]);
+	});
+
+	test("Temporal PlainYearMonth", async () => {
+		const plainYearMonth = Temporal.PlainYearMonth.from("2021-05");
+		const decoded = await quickDecode(plainYearMonth);
+		expect(decoded).toEqual(plainYearMonth);
+		expect(decoded).toBeInstanceOf(Temporal.PlainYearMonth);
+	});
+
+	test("Temporal PlainYearMonth", async () => {
+		const plainYearMonth = Temporal.PlainYearMonth.from("2021-05");
+		const decoded = await quickDecode([plainYearMonth, plainYearMonth]);
+		expect(decoded).toEqual([plainYearMonth, plainYearMonth]);
+		expect(decoded[0]).toBe(decoded[1]);
+	});
+
+	test("Temporal ZonedDateTime", async () => {
+		const zonedDateTime = Temporal.ZonedDateTime.from(
+			"2021-07-01T12:34:56-04:00[America/New_York]",
+		);
+		const decoded = await quickDecode(zonedDateTime);
+		expect(decoded).toEqual(zonedDateTime);
+		expect(decoded).toBeInstanceOf(Temporal.ZonedDateTime);
+	});
+
+	test("Temporal ZonedDateTime", async () => {
+		const zonedDateTime = Temporal.ZonedDateTime.from(
+			"2021-07-01T12:34:56-04:00[America/New_York]",
+		);
+		const decoded = await quickDecode([zonedDateTime, zonedDateTime]);
+		expect(decoded).toEqual([zonedDateTime, zonedDateTime]);
+		expect(decoded[0]).toBe(decoded[1]);
+	});
+
 	test("URL", async () => {
 		const url = new URL("https://example.com");
 		const decoded = await quickDecode(url);

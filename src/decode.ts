@@ -4,6 +4,7 @@ import {
 	DeferredReadableStream,
 	TurboBlob,
 	TurboFile,
+	supportsTemporal,
 } from "./shared.js";
 export type DecodePlugin = (
 	type: string,
@@ -614,28 +615,30 @@ export async function decode<T>(
 							value = new Date(value);
 							references.set(references.size, value);
 						} else if (subMode === SUB_MODE_TEMPORAL_DURATION) {
-							value = Temporal.Duration.from(value);
+							value = temporal().Duration.from(value);
 							references.set(references.size, value);
 						} else if (subMode === SUB_MODE_TEMPORAL_INSTANT) {
-							value = Temporal.Instant.from(value);
+							value = temporal().Instant.from(value);
 							references.set(references.size, value);
 						} else if (subMode === SUB_MODE_TEMPORAL_PLAIN_DATE) {
-							value = Temporal.PlainDate.from(value);
+							value = temporal().PlainDate.from(value);
 							references.set(references.size, value);
 						} else if (subMode === SUB_MODE_TEMPORAL_PLAIN_DATE_TIME) {
-							value = Temporal.PlainDateTime.from(value);
+							value = temporal().PlainDateTime.from(value);
 							references.set(references.size, value);
 						} else if (subMode === SUB_MODE_TEMPORAL_PLAIN_MONTH_DAY) {
-							value = Temporal.PlainMonthDay.from(value);
+							value = temporal().PlainMonthDay.from(value);
 							references.set(references.size, value);
 						} else if (subMode === SUB_MODE_TEMPORAL_PLAIN_TIME) {
-							value = Temporal.PlainTime.from(value);
+							value = temporal().PlainTime.from(value);
 							references.set(references.size, value);
 						} else if (subMode === SUB_MODE_TEMPORAL_PLAIN_YEAR_MONTH) {
-							value = Temporal.PlainYearMonth.from(value);
+							value = temporal().PlainYearMonth.from(value);
 							references.set(references.size, value);
 						} else if (subMode === SUB_MODE_TEMPORAL_ZONED_DATE_TIME) {
-							value = Temporal.ZonedDateTime.from(value);
+							value = temporal().ZonedDateTime.from(value, {
+								offset: "use",
+							});
 							references.set(references.size, value);
 						} else if (subMode === SUB_MODE_SYMBOL) {
 							value = Symbol.for(value);
@@ -731,6 +734,13 @@ export async function decode<T>(
 		});
 
 	return root.promise;
+}
+
+function temporal(): typeof Temporal {
+	if (!supportsTemporal()) {
+		throw new SyntaxError("Temporal is not supported in this runtime");
+	}
+	return Temporal;
 }
 
 function decodeTypedArray(base64: string) {

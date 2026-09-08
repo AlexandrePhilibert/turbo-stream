@@ -56,6 +56,12 @@ try {
 
 export { SUPPORTS_FILE };
 
+// Resolved on each call, so that a polyfill installed after this module is
+// evaluated still gets picked up.
+export function supportsTemporal() {
+	return typeof Temporal !== "undefined";
+}
+
 export class WaitGroup {
 	p = 0;
 	#q: (() => void)[] = [];

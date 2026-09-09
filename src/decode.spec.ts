@@ -171,6 +171,25 @@ describe("decode", () => {
 	});
 
 	test(
+		"Temporal Duration with sub-second units",
+		{ skip: !supportsTemporal() },
+		async () => {
+			for (const fields of [
+				{ hours: 1, milliseconds: 2 },
+				{ days: 1, nanoseconds: 1 },
+				{ minutes: 5, microseconds: 7 },
+				{ hours: 1, seconds: 3, milliseconds: 2 },
+				{ minutes: -5, microseconds: -7 },
+			]) {
+				const duration = Temporal.Duration.from(fields);
+				const decoded = await quickDecode(duration);
+				expect(decoded).toBeInstanceOf(Temporal.Duration);
+				expect(decoded.total("nanosecond")).toBe(duration.total("nanosecond"));
+			}
+		},
+	);
+
+	test(
 		"Temporal Duration reference",
 		{ skip: !supportsTemporal() },
 		async () => {

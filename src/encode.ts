@@ -617,10 +617,13 @@ function stringifyTemporal(
 	chunks: { push(...chunks: string[]): void },
 	value: object,
 ): boolean {
-	let tag: string;
 	if (value instanceof Temporal.Duration) {
-		tag = STR_TEMPORAL_DURATION;
-	} else if (value instanceof Temporal.Instant) {
+		chunks.push(STR_TEMPORAL_DURATION, '"', stringifyDuration(value), '"');
+		return true;
+	}
+
+	let tag: string;
+	if (value instanceof Temporal.Instant) {
 		tag = STR_TEMPORAL_INSTANT;
 	} else if (value instanceof Temporal.PlainDate) {
 		tag = STR_TEMPORAL_PLAIN_DATE;
@@ -639,6 +642,23 @@ function stringifyTemporal(
 	}
 	chunks.push(tag, '"', value.toJSON(), '"');
 	return true;
+}
+
+const DURATION_ZERO_PADDING = /\.?0+S$/;
+
+// V8 drops the sub-seconds part when the whole seconds are zero and a larger
+// unit exists, for example `PT1H0.002S` serializes as `PT1H`.
+function stringifyDuration(value: Temporal.Duration): string {
+	const hasSubSeconds =
+		value.milliseconds || value.microseconds || value.nanoseconds;
+
+	if (!hasSubSeconds) {
+		return value.toJSON();
+	}
+
+	return value
+		.toString({ fractionalSecondDigits: 9 })
+		.replace(DURATION_ZERO_PADDING, "S");
 }
 
 function prepareErrorForEncoding(error: Error, redactErrors: boolean | string) {

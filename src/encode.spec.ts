@@ -155,6 +155,25 @@ describe("encodeSync", () => {
 		expect(quickEncode(duration)).toBe(`${STR_TEMPORAL_DURATION}"PT1H30M"`);
 	});
 
+	test(
+		"Temporal Duration with sub-second units",
+		{ skip: !supportsTemporal() },
+		() => {
+			const cases: [Temporal.DurationLike, string][] = [
+				[{ hours: 1, milliseconds: 2 }, "PT1H0.002S"],
+				[{ days: 1, nanoseconds: 1 }, "P1DT0.000000001S"],
+				[{ hours: 1, milliseconds: 1500 }, "PT1H1.5S"],
+				[{ hours: 1, milliseconds: 1000 }, "PT1H1S"],
+				[{ minutes: -5, microseconds: -7 }, "-PT5M0.000007S"],
+			];
+			for (const [fields, expected] of cases) {
+				expect(quickEncode(Temporal.Duration.from(fields))).toBe(
+					`${STR_TEMPORAL_DURATION}"${expected}"`,
+				);
+			}
+		},
+	);
+
 	test("Temporal Instant", { skip: !supportsTemporal() }, () => {
 		const instant = Temporal.Instant.from("2021-03-12T00+08:00");
 		expect(quickEncode(instant)).toBe(

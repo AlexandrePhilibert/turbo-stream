@@ -288,6 +288,30 @@ describe("encodeSync", () => {
 		expect(quickEncode([obj, obj])).toBe("[42,42]");
 	});
 
+	test("object toJSON primitive does not shift later references", () => {
+		const obj = {
+			toJSON() {
+				return 42;
+			},
+		};
+		const url = new URL("https://example.com");
+		expect(quickEncode({ a: obj, b: url, c: url })).toBe(
+			`{"a":42,"b":${STR_URL}"https://example.com/","c":@1}`,
+		);
+	});
+
+	test("object toJSON null is not aliased to a later reference", () => {
+		const obj = {
+			toJSON() {
+				return null;
+			},
+		};
+		const url = new URL("https://example.com");
+		expect(quickEncode({ a: obj, b: url, c: obj, d: url })).toBe(
+			`{"a":null,"b":${STR_URL}"https://example.com/","c":null,"d":@1}`,
+		);
+	});
+
 	test("object toJSON reference", () => {
 		const obj = {
 			toJSON() {

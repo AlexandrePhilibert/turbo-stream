@@ -479,9 +479,8 @@ export function encodeSync(
 						newValue,
 					) as EncodeFrameObj,
 				);
-				if (typeof newValue === "object") {
-					counters.refId--;
-				} else {
+				counters.refId--;
+				if (newValue === null || typeof newValue !== "object") {
 					refs.delete(value);
 				}
 			} else {

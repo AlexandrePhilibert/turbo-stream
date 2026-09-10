@@ -459,6 +459,37 @@ describe("decode", () => {
 		expect(await quickDecode(obj)).toEqual(42);
 	});
 
+	test("object toJSON primitive keeps later references intact", async () => {
+		const obj = {
+			toJSON() {
+				return 42;
+			},
+		};
+		const url = new URL("https://example.com");
+		const decoded = await quickDecode({ a: obj, b: url, c: url, d: url });
+
+		expect(decoded.a).toBe(42);
+		expect(decoded.b).toBeInstanceOf(URL);
+		expect(String(decoded.b)).toBe("https://example.com/");
+		expect(decoded.c).toBe(decoded.b);
+		expect(decoded.d).toBe(decoded.b);
+	});
+
+	test("object toJSON null keeps later references intact", async () => {
+		const obj = {
+			toJSON() {
+				return null;
+			},
+		};
+		const url = new URL("https://example.com");
+		const decoded = await quickDecode({ a: obj, b: url, c: obj, d: url });
+
+		expect(decoded.a).toBe(null);
+		expect(decoded.c).toBe(null);
+		expect(decoded.b).toBeInstanceOf(URL);
+		expect(decoded.d).toBe(decoded.b);
+	});
+
 	test("object toJSON reference", async () => {
 		const obj = {
 			toJSON() {
